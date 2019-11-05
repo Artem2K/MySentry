@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Errors{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+ <form method="post">{% csrf_token %}
+  {{ form }}
+  <button class="btn btn-success" type="submit">Search</button>
+ </form>
+  {% for type_error in set_errors %}
+   <p>{{ type_error }}</p>
+    <div class="card">
+    {% for errors in table_errors %}
+     {% if type_error == errors.type %}
+      <div class="card-body">
+       <span class="font-weight">{{ errors.app_id }} | {{ errors.date }} | {{ errors.message }} |
+       {{ errors.stack_trace }} | {{ errors.type }}  | <a href="{% url 'error_detail' errors.pk %}">-></a></span>
+      </div>
+     {% endif %}
+    {% endfor %}
+   </div>
+  <br />
+  {% endfor %}
+ {% endif %}
+{% endblock content %}
