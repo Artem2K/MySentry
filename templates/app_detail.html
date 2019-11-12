@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-
-{% block title %}Errors{% endblock title %}
-
 {% block content %}
-{% if user.is_authenticated %}
+ <div>
+     {% for app in apps %}
+  <h2>{{ app.name }}</h2>
+     {% endfor %}
+ </div>
  <form>{% csrf_token %}
   {{ form }}
   <button class="btn btn-success" type="submit">Search</button>
@@ -22,5 +23,4 @@
    </div>
   <br />
   {% endfor %}
- {% endif %}
 {% endblock content %}
