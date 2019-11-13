@@ -63,17 +63,14 @@ class RecordNewError(CreateView):
         error_message = request.POST['error_message']
         error_stack_trace = request.POST['error_stack_trace']
         token = request.META['HTTP_TOKEN']
-        apps = AppModel.objects.filter(id=app_id)
-        print(app_id, error_type, error_message, error_stack_trace, token)
-        for app in apps:
-            if app.token == token:
-                new_error = ErrorModel()
-                new_error.app_id = app
-                new_error.type = error_type
-                new_error.message = error_message
-                new_error.stack_trace = error_stack_trace
-                new_error.date = datetime.now()
-                new_error.save()
+        app = AppModel.objects.filter(id=app_id, token=token).first()
+        new_error = ErrorModel()
+        new_error.app_id = app
+        new_error.type = error_type
+        new_error.message = error_message
+        new_error.stack_trace = error_stack_trace
+        new_error.date = datetime.now()
+        new_error.save()
         return HttpResponse(request)
 
 
