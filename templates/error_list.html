@@ -7,6 +7,12 @@
  <form>{% csrf_token %}
   {{ form }}
   <button class="btn btn-success" type="submit">Search</button>
+   <p><a>Date</a> | <a>Count</a></p>
+ <div class="card">
+ {% for date, count in dict_with_count_error_per_day.items %}
+  <p><a>{{ date }}</a> | <a>{{ count }}</a></p>
+ {% endfor %}
+ </div>
  </form>
   {% for type_error in set_errors %}
    <p>{{ type_error }}</p>
@@ -14,8 +20,7 @@
     {% for errors in table_errors %}
      {% if type_error == errors.type %}
       <div class="card-body">
-       <span class="font-weight">{{ errors.app_id }} | {{ errors.date }} | {{ errors.message }} |
-       {{ errors.stack_trace }} | {{ errors.type }}
+       <span class="font-weight">{{ errors.date }} | {{ errors.message }} | {{ errors.type }}
       </div>
      {% endif %}
     {% endfor %}
