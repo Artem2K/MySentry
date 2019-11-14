@@ -1,3 +1,4 @@
+<!-- TODO -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -10,12 +11,13 @@
   {{ form }}
   <button class="btn btn-success" type="submit">Search</button>
  </form>
-  <p><a>Date</a> | <a>Count</a></p>
+  <a>Count</a>
  <div class="card">
  {% for date, count in dict_with_count_error_per_day.items %}
   <p><a>{{ date }}</a> | <a>{{ count }}</a></p>
  {% endfor %}
  </div>
+ <br>
   {% for type_error in set_errors %}
    <p>{{ type_error }}</p>
     <div class="card">

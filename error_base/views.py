@@ -12,7 +12,7 @@ from random import randint
 from datetime import datetime
 
 from .models import ErrorModel, AppModel
-from .forms import ErrorListForm
+from .forms import ErrorListForm, AppListForm
 
 
 class ErrorListView(ListView):
@@ -49,7 +49,7 @@ class ErrorListView(ListView):
 class AppDetailView(DetailView):
     model = AppModel
     template_name = 'app_detail.html'
-    form_class = ErrorListForm
+    form_class = AppListForm
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         apps = AppModel.objects.filter(id=pk)
@@ -58,16 +58,26 @@ class AppDetailView(DetailView):
         all_errors = self.query_for_all_errors(search_type, day_search, pk)
         set_of_errors = set()
         dates_with_error = set()
+        hours_with_error = set()
         for error in all_errors:
             set_of_errors.add(error.type)
             dates_with_error.add(datetime.date(error.date))
+            hours_with_error.add(datetime.time(error.date))
         dict_with_count_error_per_day = {}
-        for date_with_error in dates_with_error:
-            count_errors_in_day = 0
-            for error in all_errors:
-                if datetime.date(error.date) == date_with_error:
-                    count_errors_in_day += 1
-            dict_with_count_error_per_day[date_with_error] = count_errors_in_day
+        if day_search != '':
+            for hour_with_error in hours_with_error:
+                count_errors_in_hour = 0
+                for error in all_errors:
+                    if datetime.time(error.date).hour == hour_with_error.hour:
+                        count_errors_in_hour += 1
+                dict_with_count_error_per_day[hour_with_error.hour] = count_errors_in_hour
+        else:
+            for date_with_error in dates_with_error:
+                count_errors_in_day = 0
+                for error in all_errors:
+                    if datetime.date(error.date) == date_with_error:
+                        count_errors_in_day += 1
+                dict_with_count_error_per_day[date_with_error] = count_errors_in_day
         return render(request, self.template_name,
                       {'form': self.form_class(),
                        'set_errors': set_of_errors,
@@ -87,6 +97,7 @@ class AppDetailView(DetailView):
             all_errors = ErrorModel.objects.filter(app_id=pk, date__startswith=f'{search_date_field}')
             return all_errors
         return ErrorModel.objects.filter(app_id=pk, type=search_type_field, date__startswith=f'{search_date_field}')
+
 
 class RecordNewError(CreateView):
 
