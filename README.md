@@ -23,8 +23,11 @@
         
 
 # Install
-    $ git clone https://github.com/Artem2K/MySentry/
-    $ git clone https://github.com/Artem2K/related-programs-to-MySelery
+    for server
+        $ git clone https://github.com/Artem2K/MySentry/
+        
+    for client
+        $ git clone https://github.com/Artem2K/related-programs-to-MySelery
 
 # Usage
     for server
@@ -42,6 +45,9 @@
     
         open the website and input
         http://127.0.0.1:8000/
+        
+        $ python manage.py test
+        
         
     for client
         $ pipenv install
