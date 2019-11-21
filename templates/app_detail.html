@@ -3,9 +3,9 @@
 
 {% block content %}
  <div>
-     {% for app in apps %}
-  <h2>{{ app.name }}</h2>
-     {% endfor %}
+  {% for app in apps %}
+   <h2>{{ app.name }}</h2>
+  {% endfor %}
  </div>
  <form>{% csrf_token %}
   {{ form }}
@@ -32,9 +32,10 @@
      {% endif %}
     {% endfor %}
    </div>
-  <br />
+  <br/>
 {% endfor %}
 {% endblock content %}
+
 
 
 

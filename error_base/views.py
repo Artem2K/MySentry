@@ -22,7 +22,7 @@ class ErrorListView(ListView):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         search_type = request.GET.get('type_search')
-        if search_type != '':
+        if bool(search_type):
             all_errors = ErrorModel.objects.filter(type=search_type)
         else:
             all_errors = ErrorModel.objects.all()
@@ -64,7 +64,7 @@ class AppDetailView(DetailView):
             dates_with_error.add(datetime.date(error.date))
             hours_with_error.add(datetime.time(error.date))
         dict_with_count_error_per_day = {}
-        if day_search != '':
+        if bool(day_search):
             for hour_with_error in hours_with_error:
                 count_errors_in_hour = 0
                 for error in all_errors:
@@ -87,13 +87,13 @@ class AppDetailView(DetailView):
                        })
 
     def query_for_all_errors(self, search_type_field: str, search_date_field: str, pk: int) -> QuerySet:
-        if search_type_field == '' and search_date_field == '':
+        if not bool(search_type_field) and not bool(search_date_field):
             all_errors = ErrorModel.objects.filter(app_id=pk)
             return all_errors
-        elif search_type_field != '' and search_date_field == '':
+        elif bool(search_type_field) and not bool(search_date_field):
             all_errors = ErrorModel.objects.filter(type=search_type_field, app_id=pk)
             return all_errors
-        elif search_type_field == '' and search_date_field != '':
+        elif not bool(search_type_field) and bool(search_date_field):
             all_errors = ErrorModel.objects.filter(app_id=pk, date__startswith=f'{search_date_field}')
             return all_errors
         return ErrorModel.objects.filter(app_id=pk, type=search_type_field, date__startswith=f'{search_date_field}')

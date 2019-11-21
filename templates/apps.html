@@ -4,7 +4,10 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-  <a href="{% url 'register_app' %}">Register new app</a> | <a href="{% url 'error_list' %}">To stats of all errors</a><br>
+ <p>
+  <a href="{% url 'register_app' %}">Register new app</a> | <a href="{% url 'error_list' %}">To stats of all errors</a>
+ </p>
+ <p>ID|Name|Token</p>
   {% for app in my_apps %}
    <p>{{app.id}} | {{app.name}} | {{app.token}} |  <a href="{% url 'app_detail' app.pk %}">-></a></p>
   {% endfor %}
